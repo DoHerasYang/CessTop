@@ -1,6 +1,6 @@
 
 
-#  CessTop ---- A Smart Tool written in Python to Parse the Cisco Config File and TopSec Config File 
+#  CessTop ---- A Smart Tool written in Python to Parse and Compare the Cisco Firewall Config File with TopSec Firewall Config File 
 
 ---
 
@@ -40,6 +40,14 @@ Although **CessTop** is still in programmed to make this better, but It already 
 
 ## 2. Usage
 
+>**Runtime Environment**:
+>
+>+ Only can be executed in Unix Operating System, not supported for Windows yet.
+>
+>**Reliable Package**:
+>
+>+ **Pandas**  ----------  [Python Data Analysis Library](https://pandas.pydata.org/)
+
 1. **Download** and **Unzip** the Entire Project Files into your **PATH**.
 2. Use **Python Command** : `python3` to start this tool in your PATH.
 
@@ -75,7 +83,7 @@ After the this program ends without any errors, there will be **Three files**:
 
   Version 1.0:  Core Functions Finished
 
-+ **2021 - 04 -01**
++ **2021 - 04 - 01**
 
   Version 2.0:  Refactored all the code, implemented the multi-process feature for the tool, and improved the overall operating performance, And some improvements to the console display.
 
