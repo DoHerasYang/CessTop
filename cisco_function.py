@@ -8,7 +8,7 @@
 #
 #
 
-import re
+import re, sys
 import config
 import multiprocessing
 import pandas as pd
@@ -105,12 +105,17 @@ class Cisco_Function(object):
 
         re_cisco_access_list_header = re.compile(r'access-list')
         access_list = list()
-        with open(filename, "r") as ciscoFile:
-            log_lineContent = ciscoFile.readline()
-            while log_lineContent:
-                if re.match(re_cisco_access_list_header, log_lineContent):
-                    access_list.append(log_lineContent)
+        try:
+            with open(filename, "r") as ciscoFile:
                 log_lineContent = ciscoFile.readline()
+                while log_lineContent:
+                    if re.match(re_cisco_access_list_header, log_lineContent):
+                        access_list.append(log_lineContent)
+                    log_lineContent = ciscoFile.readline()
+        except IOError:
+            config.Logger.log_fail("Error! -- Can't Find Your Cisco Config File")
+            config.Logger.log_fail("Please Check Your Cisco Config File....")
+            sys.exit(2)
         return access_list
 
     @staticmethod
@@ -119,7 +124,6 @@ class Cisco_Function(object):
             self.df_cisco = self.df_cisco.append(self.Analyze_CiscoContent(each_content=item), ignore_index=True)
 
     @staticmethod
-    # def Start_Processing(self):
     def Start_Processing(self, queue: multiprocessing.Queue):
         try:
             self.access_list = self.Process_Cisco_LogFile_ToList(filename=self.filename)

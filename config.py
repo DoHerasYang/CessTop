@@ -9,7 +9,7 @@
 #
 #
 import os
-
+import re
 
 class Default_Config:
     # Define default csv columns name
@@ -32,29 +32,45 @@ class Default_Config:
     # Define Result File Name
     result_file_name = "./output/result.csv"
 
+    # Default Cisco File Mark
+    re_cisco  = re.compile(r"access-list")
+
+    # Default TopSec File Mark
+    re_topsec = re.compile(r"firewall")
+
     def __init__(self):
         if self.output_folder_path not in os.listdir(os.getcwd()):
             try:
                 os.mkdir(self.output_folder_path)
-            except:
+            except OSError:
                 os.chmod(os.getcwd(), 777)
                 os.mkdir(self.output_folder_path)
 
 
-# Different Output Color
+# Different Output Color on Console
 class Logger(object):
 
+    HELP = '\033[33m'
+    INFO = '\033[35m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'
 
     @classmethod
-    def log_warning(cls, info):
-        print(Logger.WARNING + info + Logger.ENDC)
+    def log_warning(cls, info: str):
+        print(cls.WARNING + info + cls.ENDC)
 
     @classmethod
-    def log_fail(cls, info):
-        print(Logger.FAIL + info + Logger.ENDC)
+    def log_fail(cls, info: str):
+        print(cls.FAIL + info + cls.ENDC)
+
+    @classmethod
+    def log_show(cls, info:str):
+        print(cls.INFO + info + cls.ENDC)
+
+    @classmethod
+    def info_show(cls, info: str):
+        print(cls.HELP + info + cls.ENDC)
 
 
 default_config_dict = {
