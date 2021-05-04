@@ -43,10 +43,12 @@ Although **CessTop** is still in programmed to make this better, but It already 
 >**Runtime Environment**:
 >
 >+ Only can be executed in Unix Operating System, not supported for Windows yet.
+>+ Only Python 3.5x and Newer
 >
 >**Reliable Package**:
 >
 >+ **Pandas**  ----------  [Python Data Analysis Library](https://pandas.pydata.org/)
+>+ **argparse**  --------- [Python Command Line parameters parser](https://docs.python.org/3/library/argparse.html)
 
 1. **Download** and **Unzip** the Entire Project Files into your **PATH**.
 2. Use **Python Command** : `python3` to start this tool in your PATH.
@@ -67,7 +69,7 @@ $python3 cesstop.py -s FW-1-Cisco.log -c FW-2-TOPSEC.log
 
 ## 3. Results
 
-In Version 2.0, this tool will create a new result folder named "output" to store all the result files (.csv file).
+In Version 2.0+, this tool will create a new result folder named "output" to store all the result files (.csv file).
 
 After the this program ends without any errors, there will be **Three files**:
 
@@ -79,20 +81,30 @@ After the this program ends without any errors, there will be **Three files**:
 
 ## 4. Versions
 
-+ **2021 - 03 - 26**   
++ **2021 - 05 - 04**
 
-  Version 1.0:  Core Functions Finished
+  Version 2.1:
+
+  + Big Update for Generating Pandas DataFrame - This tool runs 1000x more efficiently.
+  + Use `asyncio` to improve the speed of File IO - IO speed Increasd by about 100 times.
+  + Refactored the Entry Code using `argparse` .
 
 + **2021 - 04 - 01**
 
-  Version 2.0:  Refactored all the code, implemented the multi-process feature for the tool, and improved the overall operating performance, And some improvements to the console display.
+  Version 2.0: 
+
+  + Refactored all the code, implemented the multi-process feature for the tool.
+  + improved the overall operating performance, And some improvements to the console display.
+
++ **2021 - 03 - 26**   
+
+  Version 1.0:  Core Functions Finished
 
 <br>
 
 ## 5. Licences
 
 The open source license of the code of this project refers to MIT.
-
 
 
 

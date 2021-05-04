@@ -2,3 +2,8 @@
 venv/
 output/
 __pycache__/
+
+Cisco.log
+TopSec.log
+
+*.pstat

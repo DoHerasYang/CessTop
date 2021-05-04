@@ -38,6 +38,7 @@ class Default_Config:
     # Default TopSec File Mark
     re_topsec = re.compile(r"firewall")
 
+    # Create Result Folder to store Result files
     def __init__(self):
         if self.output_folder_path not in os.listdir(os.getcwd()):
             try:
