@@ -11,13 +11,20 @@
 import re
 import config
 import asyncio
-from typing import Optional
+from typing import (
+    Optional,
+    overload,
+)
 import multiprocessing
 import pandas as pd
 
 
 class Topsec_Function(object):
+    """
+        Topsec_Function - Class
 
+
+    """
     @staticmethod
     async def Process_GroupAddress_Raw_List(self, queue_groupList: asyncio.Queue):
         """
@@ -106,13 +113,14 @@ class Topsec_Function(object):
 
                 # Process the First Initial
                 if Strip_Content[9] == "src":
-                    input_data["Src_Type(host/any/object-group)"] = "host"
+                    input_data["Src_Type(host/any/object-group)"] = " "
                     input_data["Src_Addr"] = Strip_Content[10]
-                    input_data["Dst_Type(host/any/object-group)"] = "host"
+                    input_data["Dst_Type(host/any/object-group)"] = " "
                     input_data["Dst_Addr"] = Strip_Content[12]
                     input_data["Eq"] = "eq"
                     input_data["Port_Type"] = Strip_Content[14]
                     if Strip_Content[-1] == "on": input_data["Log"] = "log"
+
                 elif Strip_Content[9] == "slog":
                     if Strip_Content[11] == "srcarea" and Strip_Content[13] == "dstarea":
                         if "-" in Strip_Content[16]:
@@ -122,6 +130,7 @@ class Topsec_Function(object):
                                 input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[18].split('/')[1])
                             else:
                                 input_data["Dst_Addr"] = Strip_Content[18]
+                                input_data["Dst_Type(host/any/object-group)"] = "host"
                             if Strip_Content[19] == "service":
                                 input_data["Eq"] = "eq"
                                 input_data["Port_Type"] = Strip_Content[20]
@@ -132,15 +141,19 @@ class Topsec_Function(object):
                                 input_data["Src_Mask"] = cls.exchange_maskint(Strip_Content[16].split('/')[1])
                             else:
                                 input_data["Src_Addr"] = Strip_Content[16]
+                                input_data["Src_Type(host/any/object-group)"] = "host"
 
                             if '/' in Strip_Content[18]:
                                 input_data["Dst_Addr"] = Strip_Content[18].split('/')[0]
                                 input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[18].split('/')[1])
                             else:
                                 input_data["Dst_Addr"] = Strip_Content[18]
+                                input_data["Dst_Type(host/any/object-group)"] = "host"
+
                             if Strip_Content[19] == "service":
                                 input_data["Eq"] = "eq"
                                 input_data["Port_Type"] = Strip_Content[20]
+
                             if Strip_Content[-1] == "on": input_data["Log"] = "log"
                     else:
                         if Strip_Content[13] == "src":
@@ -149,29 +162,39 @@ class Topsec_Function(object):
                                 input_data["Src_Mask"] = cls.exchange_maskint(Strip_Content[14].split('/')[1])
                             else:
                                 input_data["Src_Addr"] = Strip_Content[14]
+                                input_data["Src_Type(host/any/object-group)"] = "host"
+
                             input_data["Dst_Addr"] = Strip_Content[16]
+
                             if Strip_Content[-1] == "on": input_data["Log"] = "log"
+
                         elif Strip_Content[11] == "src":
                             if '/' in Strip_Content[11]:
                                 input_data["Src_Addr"] = Strip_Content[11].split('/')[0]
                                 input_data["Src_Mask"] = cls.exchange_maskint(Strip_Content[11].split('/')[1])
                             else:
                                 input_data["Src_Addr"] = Strip_Content[11]
+                                input_data["Src_Type(host/any/object-group)"] = "host"
+
                             if '/' in Strip_Content[13]:
                                 input_data["Dst_Addr"] = Strip_Content[13].split('/')[0]
                                 input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[13].split('/')[1])
                             else:
                                 input_data["Dst_Addr"] = Strip_Content[13]
+                                input_data["Dst_Type(host/any/object-group)"] = "host"
                         else:
                             print(each_line)
                 elif Strip_Content[9] == "srcarea" and Strip_Content[11] == "dstarea":
                     if "-" in Strip_Content[14]:
                         input_data["Src_Addr"] = Strip_Content[14]
+
                         if '/' in Strip_Content[16]:
                             input_data["Dst_Addr"] = Strip_Content[16].split('/')[0]
                             input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[16].split('/')[1])
                         else:
                             input_data["Dst_Addr"] = Strip_Content[16]
+                            input_data["Dst_Type(host/any/object-group)"] = "host"
+
                         if Strip_Content[17] == "service":
                             input_data["Eq"] = "eq"
                             input_data["Port_Type"] = Strip_Content[18]
@@ -182,12 +205,15 @@ class Topsec_Function(object):
                             input_data["Src_Mask"] = cls.exchange_maskint(Strip_Content[14].split('/')[1])
                         else:
                             input_data["Src_Addr"] = Strip_Content[14]
+                            input_data["Src_Type(host/any/object-group)"] = "host"
 
                         if '/' in Strip_Content[16]:
                             input_data["Dst_Addr"] = Strip_Content[16].split('/')[0]
                             input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[16].split('/')[1])
                         else:
                             input_data["Dst_Addr"] = Strip_Content[16]
+                            input_data["Dst_Type(host/any/object-group)"] = "host"
+
                         if Strip_Content[17] == "service":
                             input_data["Eq"] = "eq"
                             input_data["Port_Type"] = Strip_Content[18]
@@ -199,14 +225,29 @@ class Topsec_Function(object):
                         input_data["Src_Mask"] = cls.exchange_maskint(Strip_Content[12].split('/')[1])
                     else:
                         input_data["Src_Addr"] = Strip_Content[12]
+                        input_data["Src_Type(host/any/object-group)"] = "host"
 
                     if '/' in Strip_Content[14]:
                         input_data["Dst_Addr"] = Strip_Content[14].split('/')[0]
                         input_data["Dst_Mask"] = cls.exchange_maskint(Strip_Content[14].split('/')[1])
                     else:
                         input_data["Dst_Addr"] = Strip_Content[14]
+                        input_data["Dst_Type(host/any/object-group)"] = "host"
                 else:
                     print(each_line)
+
+                if re.match(r'[A-Za-z]', input_data["Src_Addr"]) or '-' in input_data["Src_Addr"]:
+                    input_data["Src_Type(host/any/object-group)"] = "object-group"
+
+                if re.match(r'[A-Za-z]', input_data["Dst_Addr"]) or '-' in input_data["Dst_Addr"]:
+                    input_data["Dst_Type(host/any/object-group)"] = "object-group"
+
+                if 'any' == input_data["Src_Addr"]:
+                    input_data["Src_Type(host/any/object-group)"] = " "
+
+                if 'any' == input_data["Dst_Addr"]:
+                    input_data["Dst_Type(host/any/object-group)"] = " "
+
             except (NameError, TypeError, RuntimeError, IndexError) as err:
                 config.Logger.log_warning("Below Config is not Supported by this Program! Please Check...")
                 print(each_line)

@@ -3,16 +3,16 @@
 # CessTop - Cisco Config Files Process Functions
 #
 #
-#
-#
-#
-#
 
 import re
 import sys
 import asyncio
 import cProfile as profile
-from typing import Optional, Sequence, Set
+from typing import (
+    Optional,
+    Sequence,
+    overload,
+)
 import config
 import multiprocessing
 import pandas as pd
@@ -22,9 +22,11 @@ import pandas as pd
 class Cisco_Function(object):
     """
         Class Cisco_Function is designed to Parse and Return the Pandas DataFrame
-        Version 2.1
+        Version Update Information:
+            + Version 2.1 - Use asyncio to allow File IO Asynchronous processing
+            + TODO: Version 2.2 - Plan to support python 2.x  - using decorator to judge the version of python
+            + TODO: Fix the Bugs of Cisco Function
     """
-
     @classmethod
     async def Analyze_CiscoContent(cls,
                                    queue_pc: asyncio.Queue,
@@ -135,6 +137,8 @@ class Cisco_Function(object):
     @classmethod
     async def Process_Cisco_LogFile_ToList(cls, queue_pc: asyncio.Queue, filename: Optional[str] = None):
         """
+        :param queue_pc:
+        :type queue_pc:
         :param filename: Correct File Name (str) or None Which could raise the FileNotFound Error
         :return: Fresh List which stores each line of cisco firewall rules
 
@@ -142,7 +146,6 @@ class Cisco_Function(object):
                   In Cisco Log File, Need to Focus on the Line starting with "access-list" for now Version 2.x
         """
         re_cisco_access_list_header = re.compile(r'access-list')
-        # access_list = list()
         try:
             with open(filename, "r") as ciscoFile:
                 log_lineContent = ciscoFile.readline()

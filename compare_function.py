@@ -26,8 +26,10 @@ class Compare_Function(object):
 
     @staticmethod
     def Process_DF_withGroupDict(self, input_df: pd.DataFrame, group_dict: dict):
+
         # 开始遍历整个数组并开始替换工作
         df_compare = input_df.copy()
+
         for sid, row in df_compare.iterrows():
             compare_str = ""
             # 处理第一个Addr组
@@ -37,10 +39,13 @@ class Compare_Function(object):
                     if compare_str in group_dict[item]:
                         row["Src_Addr"] = item
                         row["Src_Mask"] = " "
+                        row["Src_Type(host/any/object-group)"] = "object-group"
             else:
                 for item in group_dict:
                     if row["Src_Addr"] in group_dict[item]:
                         row["Src_Addr"] = item
+                        row["Src_Type(host/any/object-group)"] = "object-group"
+
 
             # 处理第二个Addr组
             compare_str = ""
@@ -50,10 +55,12 @@ class Compare_Function(object):
                     if compare_str in group_dict[item]:
                         row["Dst_Addr"] = item
                         row["Dst_Mask"] = " "
+                        row["Dst_Type(host/any/object-group)"] = "object-group"
             else:
                 for item in group_dict:
                     if row["Dst_Addr"] in group_dict[item]:
                         row["Dst_Addr"] = item
+                        row["Dst_Type(host/any/object-group)"] = "object-group"
         return df_compare
 
     # Comparable Algorithm Module
@@ -71,13 +78,42 @@ class Compare_Function(object):
         df_diff_output = pd.DataFrame(columns=config.default_config_dict["default"].df_format)
 
         # Cisco DF (Converted) compares with TopSec DF
+        # Cisco Df contains two key parameters: sid / df_data(diff_row)
         for sid, diff_row in df_cisco_transfer.iterrows():
             temp_check = None
             temp_check = df_topsec_transfer[(df_topsec_transfer["Src_Addr"] == diff_row["Src_Addr"])]
-            temp_check = temp_check[(temp_check["Src_Mask"] == diff_row["Src_Mask"])]
             temp_check = temp_check[(temp_check["Dst_Addr"] == diff_row["Dst_Addr"])]
-            temp_check = temp_check[(temp_check["Dst_Mask"] == diff_row["Dst_Mask"])]
+            # if IP addr in object-group / We should avoid comparing Mask
+            if '-' not in temp_check["Src_Addr"]:
+                temp_check = temp_check[(temp_check["Src_Mask"] == diff_row["Src_Mask"])]
+
+            if '-' not in temp_check["Dst_Addr"]:
+                temp_check = temp_check[(temp_check["Dst_Mask"] == diff_row["Dst_Mask"])]
+
             temp_check = temp_check[(temp_check["Port_Type"].str.contains(diff_row["Port_Type"], case=False))]
+
+            print("Before Src")
+            print(temp_check["Src_Type(host/any/object-group)"].values)
+            print(diff_row["Src_Type(host/any/object-group)"])
+            print(temp_check["Dst_Type(host/any/object-group)"].values)
+            print(diff_row["Dst_Type(host/any/object-group)"])
+
+            temp_check = temp_check[(
+                    temp_check["Src_Type(host/any/object-group)"].str.contains(diff_row["Src_Type(host/any/object-group)"], case=False)
+            )]
+
+            if temp_check.empty:
+                print(str(sid) +"Src_type")
+
+            print(temp_check["Dst_Type(host/any/object-group)"].values)
+            print(diff_row["Dst_Type(host/any/object-group)"])
+
+            temp_check = temp_check[(
+                    temp_check["Dst_Type(host/any/object-group)"].str.contains(diff_row["Dst_Type(host/any/object-group)"], case=False)
+            )]
+
+            if temp_check.empty:
+                print(str(sid) + "Dst_type")
 
             if temp_check.empty:
                 df_diff_temp = df_diff_temp.append(df_cisco.iloc[sid], ignore_index=False)
@@ -93,10 +129,10 @@ class Compare_Function(object):
             # 不符合添加输出
             if temp_check.empty:
                 df_diff_output = df_diff_output.append(df_cisco.iloc[sid], ignore_index=False)
-        return df_diff_output
+
+        return df_diff_temp
 
     @staticmethod
-    # def Start_Processing(self):
     def Start_Processing(self, queue_cisco: multiprocessing.Queue, queue_topsec: multiprocessing.Queue):
         while True:
             if queue_cisco.full() and queue_topsec.full():
