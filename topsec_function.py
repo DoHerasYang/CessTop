@@ -7,7 +7,6 @@
 #
 #
 #
-
 import re
 import config
 import asyncio
@@ -21,9 +20,7 @@ import pandas as pd
 
 class Topsec_Function(object):
     """
-        Topsec_Function - Class
-
-
+        Topsec_Function - Class Topsec desined to analyze and import the data of topsec config file
     """
     @staticmethod
     async def Process_GroupAddress_Raw_List(self, queue_groupList: asyncio.Queue):

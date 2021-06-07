@@ -4,7 +4,7 @@
 #  CessTop Config Files - - - - -
 #
 #
-#     This file contains all the configs such as pandas DataFrame Format and Default outputFile name
+#     This file contains all the configs such as pandas DataFrame Format / Default outputFile name / Version Information
 #
 #
 #
@@ -13,6 +13,10 @@ import re
 import pandas as pd
 
 class Default_Config:
+
+    # CessTop Version Information
+    cesstop_version = "Version 2.1.1 Release - 2021.06.08 Developed By DoHeras"
+
     # Define default csv columns name
     df_format = ["Command", "Category", "Insert_Word", "Type(permit/deny)", "Packet_Type",
                  "Src_Type(host/any/object-group)", "Src_Addr", "Src_Mask", "Dst_Type(host/any/object-group)",
@@ -56,6 +60,7 @@ class Logger(object):
     INFO = '\033[35m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
+    COMPLETE = '\033[32m'
     ENDC = '\033[0m'
 
     @classmethod
@@ -73,6 +78,10 @@ class Logger(object):
     @classmethod
     def info_show(cls, info: str):
         print(cls.HELP + info + cls.ENDC)
+
+    @classmethod
+    def complete_show(cls, info:str):
+        print(cls.COMPLETE + info + cls.ENDC)
 
 
 default_config_dict = {
