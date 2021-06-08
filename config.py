@@ -11,7 +11,15 @@
 import os
 import re
 
+<<<<<<< Updated upstream
 class Default_Config:
+=======
+
+class Default_Config:
+    # CessTop Version Information
+    cesstop_version = "Version 2.1.1 Release - 2021.06.08 Developed By DoHeras"
+
+>>>>>>> Stashed changes
     # Define default csv columns name
     df_format = ["Command", "Category", "Insert_Word", "Type(permit/deny)", "Packet_Type",
                  "Src_Type(host/any/object-group)", "Src_Addr", "Src_Mask", "Dst_Type(host/any/object-group)",
@@ -33,7 +41,7 @@ class Default_Config:
     result_file_name = "./output/result.csv"
 
     # Default Cisco File Mark
-    re_cisco  = re.compile(r"access-list")
+    re_cisco = re.compile(r"access-list")
 
     # Default TopSec File Mark
     re_topsec = re.compile(r"firewall")
@@ -50,7 +58,6 @@ class Default_Config:
 
 # Different Output Color on Console
 class Logger(object):
-
     HELP = '\033[33m'
     INFO = '\033[35m'
     WARNING = '\033[93m'
@@ -66,13 +73,20 @@ class Logger(object):
         print(cls.FAIL + info + cls.ENDC)
 
     @classmethod
-    def log_show(cls, info:str):
+    def log_show(cls, info: str):
         print(cls.INFO + info + cls.ENDC)
 
     @classmethod
     def info_show(cls, info: str):
         print(cls.HELP + info + cls.ENDC)
 
+<<<<<<< Updated upstream
+=======
+    @classmethod
+    def complete_show(cls, info: str):
+        print(cls.COMPLETE + info + cls.ENDC)
+
+>>>>>>> Stashed changes
 
 default_config_dict = {
     "default": Default_Config

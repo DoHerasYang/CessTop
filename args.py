@@ -88,6 +88,7 @@ def Process_input(args: dict) -> dict:
     src_file_type = ""
     cmp_file_type = ""
 
+<<<<<<< Updated upstream
     try:
         for key, value in args.items():
             if key == "source":
@@ -112,6 +113,28 @@ def Process_input(args: dict) -> dict:
         config.Logger.log_warning("Parameter Error:     --" + key + "/-" + key[0] + "\n")
         os.system("python3 CessTop.py -h")
         sys.exit(2)
+=======
+    # Extract args - dict
+    for key, value in args.items():
+        if key == "source":
+            src_file_type = Judge_File(filename=value[0])
+            if src_file_type == "cisco":
+                kernel_dict["src_filename"] = value[0]
+                kernel_dict["order"].append("cisco")
+            elif src_file_type == "topsec":
+                kernel_dict["target_filename"] = value[0]
+                kernel_dict["order"].append("topsec")
+        elif key == "compare":
+            cmp_file_type = Judge_File(filename=value[0])
+            if cmp_file_type == "cisco":
+                kernel_dict["src_filename"] = value[0]
+                kernel_dict["order"].append("cisco")
+            elif cmp_file_type == "topsec":
+                kernel_dict["target_filename"] = value[0]
+                kernel_dict["order"].append("topsec")
+        elif key == "model":
+            pass
+>>>>>>> Stashed changes
 
     if src_file_type == "Not_Recognized":
         config.Logger.log_fail("UnRecognized File Format! Please Check Whether File MEET FIREWALL CONFIGURATION!")
