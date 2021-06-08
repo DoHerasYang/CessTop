@@ -11,15 +11,11 @@
 import os
 import re
 
-<<<<<<< Updated upstream
-class Default_Config:
-=======
 
 class Default_Config:
     # CessTop Version Information
     cesstop_version = "Version 2.1.1 Release - 2021.06.08 Developed By DoHeras"
 
->>>>>>> Stashed changes
     # Define default csv columns name
     df_format = ["Command", "Category", "Insert_Word", "Type(permit/deny)", "Packet_Type",
                  "Src_Type(host/any/object-group)", "Src_Addr", "Src_Mask", "Dst_Type(host/any/object-group)",
@@ -80,13 +76,10 @@ class Logger(object):
     def info_show(cls, info: str):
         print(cls.HELP + info + cls.ENDC)
 
-<<<<<<< Updated upstream
-=======
     @classmethod
     def complete_show(cls, info: str):
         print(cls.COMPLETE + info + cls.ENDC)
 
->>>>>>> Stashed changes
 
 default_config_dict = {
     "default": Default_Config

@@ -15,9 +15,6 @@ import multiprocessing
 class Compare_Function(object):
 
     @staticmethod
-<<<<<<< Updated upstream
-    def exchange_mask(mask):
-=======
     def exchange_mask(mask: str):
         """
         :param mask:
@@ -25,7 +22,6 @@ class Compare_Function(object):
         :return: str[integer number (1-32)]
         :rtype: str
         """
->>>>>>> Stashed changes
         # 计算二进制字符串中 '1' 的个数
         count_bit = lambda bin_str: len([i for i in bin_str if i == '1'])
         # 分割字符串格式的子网掩码为四段列表
@@ -35,9 +31,6 @@ class Compare_Function(object):
         return str(sum(mask_count))
 
     @staticmethod
-<<<<<<< Updated upstream
-    def Process_DF_withGroupDict(self, input_df: pd.DataFrame, group_dict: dict):
-=======
     def Process_DF_withGroupDict(self, input_df: pd.DataFrame, group_dict: dict, convert_source="all"):
         """
         :param convert_source: determine the convert parameter (src or dst or all)
@@ -51,7 +44,6 @@ class Compare_Function(object):
         :return:
         :rtype:
         """
->>>>>>> Stashed changes
         # 开始遍历整个数组并开始替换工作
         df_compare = input_df.copy()
         for sid, row in df_compare.iterrows():
@@ -144,10 +136,8 @@ class Compare_Function(object):
                 except (TypeError, RuntimeError, NameError) as err:
                     print("error occur:" % err)
                 finally:
-<<<<<<< Updated upstream
                     config.Logger.log_fail("Successfully Run Comparison!")
                     config.Logger.log_fail("Please Check ./output/result.csv for details")
-=======
                     config.Logger.complete_show("Successfully Run Comparison!")
                     config.Logger.complete_show("Please Check ./output/result.csv for details")
                     config.Logger.info_show(" ")
@@ -155,13 +145,9 @@ class Compare_Function(object):
                     config.Logger.info_show(
                         "Thanks for your Usage... Any Questions Please Email: doherasyanng@gmail.com")
                     config.Logger.info_show("Developed By DoHeras @ June 2021")
->>>>>>> Stashed changes
                     break
 
     def __init__(self, rule: str = "Cisco_cmp_TopSec"):
         self.df_compare = None
-<<<<<<< Updated upstream
-=======
         self.dict_group = None
         self.cmp_rule = rule
->>>>>>> Stashed changes
