@@ -103,3 +103,4 @@ if __name__ == "__main__":
     # compare_process.join()
 
     Dispatcher(dispatcher_dict=filename_dict)
+

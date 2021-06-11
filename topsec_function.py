@@ -9,12 +9,16 @@
 #
 
 import re
+import time
+
 import config
 import asyncio
+from tqdm import tqdm
 from typing import Optional
 import multiprocessing
 import pandas as pd
 
+unrecognized_config = list()
 
 class Topsec_Function(object):
 
@@ -208,8 +212,8 @@ class Topsec_Function(object):
                 else:
                     print(each_line)
             except (NameError, TypeError, RuntimeError, IndexError) as err:
-                config.Logger.log_warning("Below Config is not Supported by this Program! Please Check...")
-                print(each_line)
+                # print(each_line)
+                unrecognized_config.append(each_line)
             finally:
                 if queue_df.full():
                     await queue_df.join()
@@ -242,7 +246,6 @@ class Topsec_Function(object):
             if queue_pc.full():
                 await queue_pc.join()
             await queue_pc.put("complete_process")
-
         return "Finished Extract Firewall Policy From Config File"
 
     @staticmethod
@@ -308,9 +311,17 @@ class Topsec_Function(object):
 
         # Concurrency Run
         try:
-            results_df = await asyncio.gather(*tasks, return_exceptions=True)
-            for task in tasks:
-                task.cancel()
+            # results_df = await asyncio.gather(*tasks, return_exceptions=True)
+            # for task in tasks:
+            #     task.cancel()
+
+            # ProgressBar Show
+            bar = tqdm(total=len(tasks), nrows=4, ncols=130, desc="TopSec Process")
+            for f in asyncio.as_completed(tasks):
+                result = await f
+                # bar.set_description("TopSec Process - {}".format(result))
+                bar.update()
+            bar.close()
         except asyncio.CancelledError:
             print("UnExpected Error! - The TopSec Processing unexpectedly cancel!")
             exit(0)
@@ -329,6 +340,7 @@ class Topsec_Function(object):
         finally:
             queue.put(self.df_topsec)
             queue.put(self.group_dict)
+            queue.put(unrecognized_config)
             self.df_topsec.to_csv(config.default_config_dict["default"].topsec_csv_Name,
                                   sep=",",
                                   header=config.default_config_dict["default"].df_format,
@@ -339,6 +351,7 @@ class Topsec_Function(object):
         self.df_topsec = None
         self.df_dict_list = list()
         self.group_dict = dict()
+        self.unrecognized_config = list()
         self.re_topsec_group = re.compile(r'^define group_address add')
         self.re_topsec_group_stop = re.compile(r'^define')
         self.re_topsec = re.compile(r'firewall policy add name')

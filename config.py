@@ -54,10 +54,12 @@ class Default_Config:
 
 # Different Output Color on Console
 class Logger(object):
+
     HELP = '\033[33m'
     INFO = '\033[35m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
+    COMPLETE = '\033[34m'
     ENDC = '\033[0m'
 
     @classmethod

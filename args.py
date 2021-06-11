@@ -67,7 +67,8 @@ def Args_Define() -> dict:
                         help="Strict model makes CessTop Do NOT ignore Config Merge. Release model makes CessTop ignore Config Merge.")
 
     parser.add_argument("-v", "--version",
-                        action="store_true",
+                        action="version",
+                        version="CessTop: V2.2",
                         help="Current Tool Version Information ")
 
     # args
